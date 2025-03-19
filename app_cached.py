@@ -10,7 +10,7 @@ from prometheus_client.exposition import make_wsgi_app
 app = Flask(__name__)
 cache = {}
 
-
+# Визначення метрик Prometheus
 REQUEST_COUNT = Counter('http_requests_total', 'Загальна кількість HTTP запитів')
 REQUEST_LATENCY = Histogram('http_request_latency_seconds', 'Затримка HTTP запитів')
 CACHE_HIT_COUNT = Counter('cache_hits_total', 'Кількість попадань в кеш')
@@ -40,7 +40,7 @@ def get_item(item_id):
             data = get_data_from_slow_source(item_id)
             cache[item_id] = data
             print(f"Дані отримано з повільного джерела та закешовано для item_id = {item_id}")
-    CACHE_SIZE.set(len(cache)) 
+    CACHE_SIZE.set(len(cache)) # Встановлюємо значення Gauge вручну після оновлення кешу
     return f"Отримано дані: {data}"
 
 @app.route('/metrics')

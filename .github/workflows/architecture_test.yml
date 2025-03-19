@@ -1,0 +1,33 @@
+name: Architecture Test CI # Назва вашого workflow
+
+on:
+  push:
+    branches: [ "main" ] # Запуск workflow при push в гілку main
+  pull_request:
+    branches: [ "main" ] # Запуск workflow при pull request в гілку main
+
+jobs:
+  build: # Назва job
+    runs-on: ubuntu-latest # Операційна система для виконання job
+
+    steps: # Список кроків для job
+      - name: Checkout code # Назва кроку
+        uses: actions/checkout@v3 # Використання готової action для checkout коду
+
+      - name: Set up Python 3.12 # Назва кроку
+        uses: actions/setup-python@v4 # Використання готової action для налаштування Python
+        with:
+          python-version: "3.12" # Версія Python
+
+      - name: Install dependencies # Назва кроку
+        run: | # Виконання команд shell
+          python -m pip install --upgrade pip # Оновлення pip
+          pip install flask pytest requests pylint prometheus-client # Встановлення залежностей
+
+      - name: Run Pylint (Static Analysis) # Назва кроку
+        run: | # Виконання команд shell
+          pylint app_cached.py app.py integration_tests.py integration_tests_no_cache.py test_app.py test_app_no_cache.py sleep_test.py run_tests.py # Запуск Pylint
+
+      - name: Run Integration Tests (Pytest) # Назва кроку
+        run: | # Виконання команд shell
+          pytest integration_tests.py integration_tests_no_cache.py test_app.py test_app_no_cache.py # 

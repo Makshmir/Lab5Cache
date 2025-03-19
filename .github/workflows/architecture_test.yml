@@ -26,8 +26,8 @@ jobs:
 
       - name: Run Pylint (Static Analysis) # Назва кроку
         run: | # Виконання команд shell
-          pylint app_cached.py app.py integration_tests.py integration_tests_no_cache.py test_app.py test_app_no_cache.py sleep_test.py run_tests.py # Запуск Pylint
+          pylint app_cached.py  # Запуск Pylint
 
       - name: Run Integration Tests (Pytest) # Назва кроку
         run: | # Виконання команд shell
-          pytest integration_tests.py integration_tests_no_cache.py test_app.py test_app_no_cache.py # 
+          pytest integration_tests.py

@@ -4,7 +4,7 @@
 """
 import time
 from flask import Flask
-from prometheus_client import Counter, Histogram, Gauge, generate_latest, REGISTRY
+from prometheus_client import Counter, Histogram, Gauge
 from prometheus_client.exposition import make_wsgi_app
 
 app = Flask(__name__)
@@ -24,8 +24,12 @@ def get_data_from_slow_source(item_id):
 
 @app.route('/item/<int:item_id>')
 def get_item(item_id):
+    """
+    Обробляє запит на отримання даних про елемент за item_id.
+    Використовує кеш для прискорення повторних запитів.
+    """
     REQUEST_COUNT.inc()
-    start_time = time.time()
+    # start_time = time.time() # Видалено невикористану змінну start_time
     with REQUEST_LATENCY.time():
         if item_id in cache:
             CACHE_HIT_COUNT.inc()
@@ -43,5 +47,7 @@ def get_item(item_id):
 def metrics():
     """Експортує Prometheus метрики."""
     return make_wsgi_app() # Просто повертаємо WSGI-застосунок, не викликаючи його
+
 if __name__ == '__main__':
     app.run(debug=True)
+    

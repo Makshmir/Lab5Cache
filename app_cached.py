@@ -7,6 +7,10 @@ from flask import Flask
 from prometheus_client import Counter, Histogram, Gauge
 from prometheus_client.exposition import make_wsgi_app
 
+
+
+
+
 app = Flask(__name__)
 cache = {}
 
